@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#080D18" />
+<meta name="description" content="FastMessage — быстрый защищённый мессенджер с видеозвонками" />
+<title>FastMessage</title>
+<link rel="preconnect" href="https://www.gstatic.com" />
+<link rel="stylesheet" href="style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2338BDF8'/><stop offset='1' stop-color='%238B5CF6'/></linearGradient></defs><rect width='100' height='100' rx='26' fill='url(%23g)'/><path d='M22 52l56-26-20 52-10-20-26-6z' fill='white'/></svg>" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     SVG-СПРАЙТ ИКОНОК
+     ═══════════════════════════════════════════════════════════════════ -->
+<svg class="svg-sprite" aria-hidden="true">
+  <defs>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></symbol>
+    <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></symbol>
+    <symbol id="i-paperclip" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></symbol>
+    <symbol id="i-mic-off" viewBox="0 0 24 24"><path d="M1 1l22 22M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23M12 19v4M8 23h8"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-phone-off" viewBox="0 0 24 24"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91M23 1L1 23"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></symbol>
+    <symbol id="i-video-off" viewBox="0 0 24 24"><path d="M16 16v2a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10M1 1l22 22"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="19" r="1.6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+    <symbol id="i-check-double" viewBox="0 0 24 24"><path d="M18 6L7 17l-4-4"/><path d="M22 6l-9 9"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 17v5M9 10.76V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v5.76l2 3.24H7l2-3.24z"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8M10 12h4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+    <symbol id="i-bell-off" viewBox="0 0 24 24"><path d="M13.73 21a2 2 0 0 1-3.46 0M18.63 13A17.89 17.89 0 0 1 18 8M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14M18 8a6 6 0 0 0-9.33-5M1 1l22 22"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
+    <symbol id="i-reply" viewBox="0 0 24 24"><path d="M9 17l-6-6 6-6"/><path d="M21 18v-2a6 6 0 0 0-6-6H3"/></symbol>
+    <symbol id="i-forward" viewBox="0 0 24 24"><path d="M15 17l6-6-6-6"/><path d="M3 18v-2a6 6 0 0 1 6-6h12"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M13 2v7h7"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 3l14 9-14 9V3z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-camera-switch" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v4M9 21H5a2 2 0 0 1-2-2v-4"/><path d="M21 9a9 9 0 0 0-15-3M3 15a9 9 0 0 0 15 3"/></symbol>
+    <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></symbol>
+    <symbol id="i-verified" viewBox="0 0 24 24"><path d="M12 1.6l2.6 2.2 3.4-.3.9 3.3 2.9 1.8-1.4 3.1 1.4 3.1-2.9 1.8-.9 3.3-3.4-.3L12 22.4l-2.6-2.2-3.4.3-.9-3.3L2.2 15.4l1.4-3.1-1.4-3.1 2.9-1.8.9-3.3 3.4.3z" fill="currentColor" stroke="none"/><path d="M8.2 12.2l2.6 2.6 5-5" stroke="#fff" stroke-width="2.2" fill="none"/></symbol>
+    <symbol id="i-crown" viewBox="0 0 24 24"><path d="M2 18h20l-2-10-5 4-3-6-3 6-5-4z" fill="currentColor" stroke="none"/><rect x="3" y="19" width="18" height="2.5" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-stats" viewBox="0 0 24 24"><path d="M3 21V9M9 21V3M15 21v-7M21 21V7"/></symbol>
+    <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 0 0 1 1h3l6 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M17 8a5 5 0 0 1 0 8"/></symbol>
+    <symbol id="i-gif" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M9.5 10.2a2.4 2.4 0 1 0 .3 3.6h-1.4M13 9.8v4.6M16.2 14.4V9.8h3M16.2 12.2h2.3"/></symbol>
+    <symbol id="i-sticker" viewBox="0 0 24 24"><path d="M20 12.5V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h5.5z"/><path d="M12.5 20a7.5 7.5 0 0 0 7.5-7.5h-5a2.5 2.5 0 0 0-2.5 2.5z"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.6 7.6a5.5 5.5 0 1 0-7.8 7.8 5.5 5.5 0 0 0 7.8-7.8zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  </defs>
+</svg>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ЗАГРУЗОЧНЫЙ ЭКРАН
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="bootScreen" class="boot-screen">
+  <div class="boot-logo">
+    <svg viewBox="0 0 100 100"><defs><linearGradient id="bootG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#bootG)"/><path d="M22 52l56-26-20 52-10-20-26-6z" fill="white"/></svg>
+  </div>
+  <div class="boot-title">FastMessage</div>
+  <div class="boot-bar"><span></span></div>
+  <div class="boot-hint" id="bootHint">Соединение с сервером…</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ЭКРАН АВТОРИЗАЦИИ
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="authScreen" class="auth-screen hidden">
+  <div class="auth-bg"><span class="orb orb-1"></span><span class="orb orb-2"></span><span class="orb orb-3"></span></div>
+
+  <div class="auth-card glass">
+    <div class="auth-brand">
+      <div class="auth-brand-logo">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="authG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#authG)"/><path d="M22 52l56-26-20 52-10-20-26-6z" fill="white"/></svg>
+      </div>
+      <h1>FastMessage</h1>
+      <p id="authSubtitle">Быстрые сообщения. Настоящие звонки.</p>
+    </div>
+
+    <!-- ПАНЕЛЬ: вход / регистрация -->
+    <div id="authPanelMain" class="auth-panel">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-authtab="login" type="button">Вход</button>
+        <button class="auth-tab" data-authtab="register" type="button">Регистрация</button>
+        <span class="auth-tab-ink" id="authTabInk"></span>
+      </div>
+
+      <!-- Форма входа -->
+      <form id="loginForm" class="auth-form" autocomplete="on" novalidate>
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <div class="input-wrap">
+            <svg class="input-icon"><use href="#i-mail"/></svg>
+            <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Пароль</label>
+          <div class="input-wrap">
+            <svg class="input-icon"><use href="#i-lock"/></svg>
+            <input type="password" id="loginPassword" placeholder="Ваш пароль" autocomplete="current-password" required />
+            <button type="button" class="pw-toggle" data-pwtoggle="loginPassword" aria-label="Показать пароль"><svg><use href="#i-eye"/></svg></button>
+          </div>
+        </div>
+        <button type="button" class="link-btn right" id="forgotPasswordBtn">Забыли пароль?</button>
+        <div class="auth-error" id="loginError"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="loginSubmit">
+          <span class="btn-label">Войти</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
+
+      <!-- Форма регистрации -->
+      <form id="registerForm" class="auth-form hidden" autocomplete="on" novalidate>
+        <div class="field">
+          <label for="registerEmail">Email</label>
+          <div class="input-wrap">
+            <svg class="input-icon"><use href="#i-mail"/></svg>
+            <input type="email" id="registerEmail" placeholder="you@example.com" autocomplete="email" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="registerPassword">Пароль</label>
+          <div class="input-wrap">
+            <svg class="input-icon"><use href="#i-lock"/></svg>
+            <input type="password" id="registerPassword" placeholder="Минимум 6 символов" autocomplete="new-password" required />
+            <button type="button" class="pw-toggle" data-pwtoggle="registerPassword" aria-label="Показать пароль"><svg><use href="#i-eye"/></svg></button>
+          </div>
+          <div class="pw-strength"><span id="pwStrengthBar"></span></div>
+          <div class="pw-strength-label" id="pwStrengthLabel"></div>
+        </div>
+        <div class="field">
+          <label for="registerPassword2">Повторите пароль</label>
+          <div class="input-wrap">
+            <svg class="input-icon"><use href="#i-lock"/></svg>
+            <input type="password" id="registerPassword2" placeholder="Ещё раз" autocomplete="new-password" required />
+            <button type="button" class="pw-toggle" data-pwtoggle="registerPassword2" aria-label="Показать пароль"><svg><use href="#i-eye"/></svg></button>
+          </div>
+        </div>
+        <div class="auth-error" id="registerError"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="registerSubmit">
+          <span class="btn-label">Создать аккаунт</span>
+          <span class="spinner"></span>
+        </button>
+        <p class="auth-note">Регистрируясь, вы соглашаетесь с правилами сервиса. Мы отправим письмо для подтверждения адреса.</p>
+      </form>
+    </div>
+
+    <!-- ПАНЕЛЬ: восстановление пароля -->
+    <div id="authPanelReset" class="auth-panel hidden">
+      <button type="button" class="panel-back" id="resetBackBtn"><svg><use href="#i-arrow-left"/></svg> Назад</button>
+      <h2 class="panel-title">Восстановление пароля</h2>
+      <p class="panel-text">Укажите email — мы пришлём ссылку для создания нового пароля.</p>
+      <form id="resetForm" class="auth-form" novalidate>
+        <div class="field">
+          <label for="resetEmail">Email</label>
+          <div class="input-wrap">
+            <svg class="input-icon"><use href="#i-mail"/></svg>
+            <input type="email" id="resetEmail" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="auth-error" id="resetError"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="resetSubmit">
+          <span class="btn-label">Отправить ссылку</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
+    </div>
+
+    <!-- ПАНЕЛЬ: подтверждение email -->
+    <div id="authPanelVerify" class="auth-panel hidden">
+      <div class="verify-icon"><svg><use href="#i-mail"/></svg></div>
+      <h2 class="panel-title">Подтвердите email</h2>
+      <p class="panel-text">Мы отправили письмо на <b id="verifyEmailLabel">—</b>. Откройте ссылку в письме, затем нажмите «Я подтвердил».</p>
+      <div class="auth-error" id="verifyError"></div>
+      <button type="button" class="btn btn-primary btn-block" id="verifyCheckBtn">
+        <span class="btn-label">Я подтвердил</span><span class="spinner"></span>
+      </button>
+      <button type="button" class="btn btn-ghost btn-block" id="verifyResendBtn">
+        <span class="btn-label">Отправить письмо ещё раз</span><span class="spinner"></span>
+      </button>
+      <button type="button" class="link-btn center" id="verifyLogoutBtn">Выйти и войти другим аккаунтом</button>
+      <p class="auth-note">Письмо может попасть в «Спам» или «Промоакции».</p>
+    </div>
+
+    <!-- ПАНЕЛЬ: создание профиля -->
+    <div id="authPanelProfile" class="auth-panel hidden">
+      <h2 class="panel-title">Создайте профиль</h2>
+      <p class="panel-text">Так вас увидят другие пользователи FastMessage.</p>
+
+      <div class="avatar-picker">
+        <div class="avatar-preview" id="setupAvatarPreview"><span>?</span></div>
+        <input type="file" id="setupAvatarInput" accept="image/*" hidden />
+        <button type="button" class="btn btn-ghost btn-sm" id="setupAvatarBtn"><svg><use href="#i-camera"/></svg> Загрузить фото</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="setupAvatarClear">Без фото</button>
+      </div>
+
+      <form id="profileSetupForm" class="auth-form" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="setupFirstName">Имя *</label>
+            <div class="input-wrap"><input type="text" id="setupFirstName" placeholder="Иван" maxlength="32" required /></div>
+          </div>
+          <div class="field">
+            <label for="setupLastName">Фамилия</label>
+            <div class="input-wrap"><input type="text" id="setupLastName" placeholder="Петров" maxlength="32" /></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="setupUsername">Username *</label>
+          <div class="input-wrap">
+            <span class="input-prefix">@</span>
+            <input type="text" id="setupUsername" placeholder="ivan" maxlength="24" required />
+            <span class="input-status" id="setupUsernameStatus"></span>
+          </div>
+          <div class="field-hint" id="setupUsernameHint">От 3 до 24 символов: латиница, цифры, «_».</div>
+        </div>
+        <div class="field">
+          <label for="setupBio">О себе</label>
+          <textarea id="setupBio" placeholder="Пара слов о вас" maxlength="140" rows="2"></textarea>
+          <div class="field-hint"><span id="setupBioCount">0</span>/140</div>
+        </div>
+        <div class="auth-error" id="profileSetupError"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="profileSetupSubmit">
+          <span class="btn-label">Начать общение</span><span class="spinner"></span>
+        </button>
+      </form>
+    </div>
+
+    <div class="auth-footer">
+      <button type="button" class="link-btn" id="authThemeToggle"><svg><use href="#i-moon"/></svg> Тема</button>
+      <span class="dot-sep">•</span>
+      <select id="authLangSelect" class="mini-select">
+        <option value="ru">Русский</option>
+        <option value="uz">O‘zbekcha</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ОСНОВНОЕ ПРИЛОЖЕНИЕ
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="appScreen" class="app-screen hidden">
+
+  <!-- ── Боковая панель ─────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Шапка -->
+    <header class="sidebar-head">
+      <button class="avatar-btn" id="myAvatarBtn" title="Мой профиль">
+        <span class="avatar sm" id="myAvatar"><span>?</span></span>
+      </button>
+      <div class="sidebar-search">
+        <svg class="input-icon"><use href="#i-search"/></svg>
+        <input type="search" id="globalSearchInput" placeholder="Поиск чатов и людей" autocomplete="off" />
+        <button class="icon-btn tiny hidden" id="globalSearchClear"><svg><use href="#i-x"/></svg></button>
+      </div>
+      <button class="icon-btn" id="newChatBtn" title="Новый чат"><svg><use href="#i-plus"/></svg></button>
+    </header>
+
+    <!-- Переключатель аккаунтов -->
+    <div class="account-switcher" id="accountSwitcher">
+      <button class="account-current" id="accountCurrentBtn">
+        <span class="avatar xs" id="accountCurrentAvatar"><span>?</span></span>
+        <span class="account-current-name" id="accountCurrentName">—</span>
+        <svg class="chev"><use href="#i-chevron-down"/></svg>
+      </button>
+      <div class="account-list hidden" id="accountList"></div>
+    </div>
+
+    <!-- Вкладки -->
+    <nav class="sidebar-tabs" id="sidebarTabs">
+      <button class="side-tab active" data-tab="chats"><svg><use href="#i-chat"/></svg><span>Чаты</span><i class="tab-badge hidden" id="tabBadgeChats"></i></button>
+      <button class="side-tab" data-tab="contacts"><svg><use href="#i-users"/></svg><span>Контакты</span></button>
+      <button class="side-tab" data-tab="settings"><svg><use href="#i-settings"/></svg><span>Настройки</span></button>
+      <button class="side-tab hidden" data-tab="admin" id="adminTabBtn"><svg><use href="#i-shield"/></svg><span>Админ</span></button>
+    </nav>
+
+    <!-- Содержимое вкладок -->
+    <div class="sidebar-body">
+
+      <!-- ВКЛАДКА: ЧАТЫ -->
+      <section class="tab-pane active" data-pane="chats">
+        <div class="chip-row" id="chatFilters">
+          <button class="chip active" data-filter="all">Все</button>
+          <button class="chip" data-filter="unread">Непрочитанные</button>
+          <button class="chip" data-filter="archived"><svg><use href="#i-archive"/></svg> Архив</button>
+        </div>
+        <div class="list" id="chatList"></div>
+        <div class="empty-state hidden" id="chatListEmpty">
+          <svg><use href="#i-chat"/></svg>
+          <h3>Пока нет чатов</h3>
+          <p>Найдите человека по @username и начните переписку.</p>
+          <button class="btn btn-primary btn-sm" id="emptyStartChatBtn">Найти собеседника</button>
+        </div>
+        <div class="search-results hidden" id="globalSearchResults"></div>
+      </section>
+
+      <!-- ВКЛАДКА: КОНТАКТЫ -->
+      <section class="tab-pane" data-pane="contacts">
+        <div class="pane-head">
+          <div class="sidebar-search inline">
+            <svg class="input-icon"><use href="#i-search"/></svg>
+            <input type="search" id="contactSearchInput" placeholder="Найти по @username" autocomplete="off" />
+          </div>
+          <button class="btn btn-primary btn-sm btn-block" id="findPeopleBtn"><svg><use href="#i-user-plus"/></svg> Найти людей</button>
+        </div>
+        <div class="list-section-title">Мои контакты <span id="contactsCount" class="muted-count">0</span></div>
+        <div class="list" id="contactList"></div>
+        <div class="empty-state hidden" id="contactListEmpty">
+          <svg><use href="#i-users"/></svg>
+          <h3>Контактов нет</h3>
+          <p>Добавляйте людей, чтобы быстро начинать чаты и звонки.</p>
+        </div>
+        <div class="list-section-title" id="peopleResultsTitle" hidden>Результаты поиска</div>
+        <div class="list" id="peopleResults"></div>
+      </section>
+
+      <!-- ВКЛАДКА: НАСТРОЙКИ -->
+      <section class="tab-pane" data-pane="settings">
+        <div class="settings-profile" id="settingsProfileCard">
+          <span class="avatar lg" id="settingsAvatar"><span>?</span></span>
+          <div class="settings-profile-info">
+            <div class="settings-profile-name" id="settingsName">—</div>
+            <div class="settings-profile-username" id="settingsUsername">@—</div>
+            <div class="settings-profile-bio" id="settingsBio"></div>
+          </div>
+          <button class="icon-btn" id="editProfileBtn" title="Изменить профиль"><svg><use href="#i-edit"/></svg></button>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Оформление</div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-moon"/></svg></span>
+            <span class="settings-row-label">Тёмная тема</span>
+            <label class="switch"><input type="checkbox" id="themeSwitch" /><span></span></label>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-globe"/></svg></span>
+            <span class="settings-row-label">Язык</span>
+            <select id="langSelect" class="mini-select">
+              <option value="ru">Русский</option>
+              <option value="uz">O‘zbekcha</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-image"/></svg></span>
+            <span class="settings-row-label">Обои чата</span>
+            <select id="wallpaperSelect" class="mini-select">
+              <option value="aurora">Aurora</option>
+              <option value="mesh">Mesh</option>
+              <option value="plain">Без узора</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Уведомления</div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-bell"/></svg></span>
+            <span class="settings-row-label">Всплывающие уведомления</span>
+            <label class="switch"><input type="checkbox" id="notifyToastSwitch" checked /><span></span></label>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-speaker"/></svg></span>
+            <span class="settings-row-label">Звук сообщений</span>
+            <label class="switch"><input type="checkbox" id="notifySoundSwitch" checked /><span></span></label>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Приватность</div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-clock"/></svg></span>
+            <span class="settings-row-label">Кто видит «был(а) в сети»</span>
+            <select id="privacyLastSeen" class="mini-select">
+              <option value="everyone">Все</option>
+              <option value="contacts">Контакты</option>
+              <option value="nobody">Никто</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-image"/></svg></span>
+            <span class="settings-row-label">Кто видит аватар</span>
+            <select id="privacyAvatar" class="mini-select">
+              <option value="everyone">Все</option>
+              <option value="contacts">Контакты</option>
+              <option value="nobody">Никто</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-phone"/></svg></span>
+            <span class="settings-row-label">Кто может звонить</span>
+            <select id="privacyCalls" class="mini-select">
+              <option value="everyone">Все</option>
+              <option value="contacts">Контакты</option>
+              <option value="nobody">Никто</option>
+            </select>
+          </div>
+          <div class="settings-row">
+            <span class="settings-row-icon"><svg><use href="#i-lock"/></svg></span>
+            <span class="settings-row-label">Двухэтапное подтверждение входа (по почте)</span>
+            <label class="switch"><input type="checkbox" id="twoStepSwitch" /><span></span></label>
+          </div>
+          <button class="settings-row as-button" id="blockedListBtn">
+            <span class="settings-row-icon"><svg><use href="#i-ban"/></svg></span>
+            <span class="settings-row-label">Заблокированные</span>
+            <span class="muted-count" id="blockedCount">0</span>
+            <svg class="chev"><use href="#i-chevron-right"/></svg>
+          </button>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">Аккаунт</div>
+          <button class="settings-row as-button" id="manageAccountsBtn">
+            <span class="settings-row-icon"><svg><use href="#i-users"/></svg></span>
+            <span class="settings-row-label">Управление аккаунтами</span>
+            <svg class="chev"><use href="#i-chevron-right"/></svg>
+          </button>
+          <button class="settings-row as-button" id="changePasswordBtn">
+            <span class="settings-row-icon"><svg><use href="#i-key"/></svg></span>
+            <span class="settings-row-label">Изменить пароль</span>
+            <svg class="chev"><use href="#i-chevron-right"/></svg>
+          </button>
+          <button class="settings-row as-button danger" id="logoutBtn">
+            <span class="settings-row-icon"><svg><use href="#i-logout"/></svg></span>
+            <span class="settings-row-label">Выйти</span>
+          </button>
+          <button class="settings-row as-button danger" id="deleteAccountBtn">
+            <span class="settings-row-icon"><svg><use href="#i-trash"/></svg></span>
+            <span class="settings-row-label">Удалить аккаунт</span>
+          </button>
+        </div>
+
+        <div class="settings-about">FastMessage <span id="appVersion">1.0.0</span></div>
+      </section>
+
+      <!-- ВКЛАДКА: АДМИН -->
+      <section class="tab-pane" data-pane="admin">
+        <div class="admin-warning" id="adminWarning">
+          <svg><use href="#i-info"/></svg>
+          <div>
+            <b>О защите админ-панели</b>
+            <p>Доступ ограничен правилами базы данных на сервере. Проверка на клиенте — только для интерфейса.</p>
+          </div>
+        </div>
+
+        <div class="stat-grid" id="adminStats">
+          <div class="stat-card"><div class="stat-value" id="statUsers">—</div><div class="stat-label">Пользователей</div></div>
+          <div class="stat-card"><div class="stat-value" id="statOnline">—</div><div class="stat-label">Онлайн</div></div>
+          <div class="stat-card"><div class="stat-value" id="statChats">—</div><div class="stat-label">Чатов</div></div>
+          <div class="stat-card"><div class="stat-value" id="statMessages">—</div><div class="stat-label">Сообщений</div></div>
+        </div>
+
+        <div class="admin-tabs">
+          <button class="chip active" data-admintab="users">Пользователи</button>
+          <button class="chip" data-admintab="reports">Жалобы <i class="tab-badge hidden" id="adminReportsBadge"></i></button>
+          <button class="chip" data-admintab="announce">Объявления</button>
+          <button class="chip" data-admintab="gifts">🎁 Подарки</button>
+          <button class="chip" data-admintab="log">📜 Лог</button>
+        </div>
+
+        <div class="admin-pane active" data-adminpane="users">
+          <div class="sidebar-search inline">
+            <svg class="input-icon"><use href="#i-search"/></svg>
+            <input type="search" id="adminUserSearch" placeholder="Поиск по имени, @username, email" autocomplete="off" />
+          </div>
+          <div class="list" id="adminUserList"></div>
+        </div>
+
+        <div class="admin-pane" data-adminpane="reports">
+          <div class="list" id="adminReportList"></div>
+          <div class="empty-state small hidden" id="adminReportsEmpty"><svg><use href="#i-flag"/></svg><p>Жалоб нет</p></div>
+        </div>
+
+        <div class="admin-pane" data-adminpane="gifts" id="adminGiftsPane"></div>
+
+        <div class="admin-pane" data-adminpane="log" id="adminLogPane"></div>
+
+        <div class="admin-pane" data-adminpane="announce">
+          <div class="field">
+            <label for="announceTitle">Заголовок</label>
+            <div class="input-wrap"><input type="text" id="announceTitle" placeholder="Например: Плановые работы" maxlength="80" /></div>
+          </div>
+          <div class="field">
+            <label for="announceText">Текст объявления</label>
+            <textarea id="announceText" rows="4" maxlength="600" placeholder="Что сообщить пользователям"></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" id="announceSendBtn"><svg><use href="#i-megaphone"/></svg> Опубликовать</button>
+          <div class="list-section-title">Опубликованные</div>
+          <div class="list" id="announceList"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Мобильная нижняя навигация -->
+    <nav class="mobile-nav" id="mobileNav">
+      <button class="mnav-btn active" data-tab="chats"><svg><use href="#i-chat"/></svg><span>Чаты</span><i class="tab-badge hidden" id="mobileBadgeChats"></i></button>
+      <button class="mnav-btn" data-tab="contacts"><svg><use href="#i-users"/></svg><span>Контакты</span></button>
+      <button class="mnav-btn" data-tab="settings"><svg><use href="#i-settings"/></svg><span>Настройки</span></button>
+      <button class="mnav-btn hidden" data-tab="admin" id="mobileAdminBtn"><svg><use href="#i-shield"/></svg><span>Админ</span></button>
+    </nav>
+  </aside>
+
+  <!-- ── Область чата ───────────────────────────────────────────────── -->
+  <main class="chat-area" id="chatArea" data-wallpaper="aurora">
+
+    <!-- Заглушка «чат не выбран» -->
+    <div class="chat-placeholder" id="chatPlaceholder">
+      <div class="placeholder-logo">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="phG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#38BDF8"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="26" fill="url(#phG)"/><path d="M22 52l56-26-20 52-10-20-26-6z" fill="white"/></svg>
+      </div>
+      <h2>Выберите чат</h2>
+      <p>Сообщения защищены правилами доступа Firebase.<br/>Звонки идут напрямую между устройствами через WebRTC.</p>
+    </div>
+
+    <!-- Активный чат -->
+    <div class="chat-view hidden" id="chatView">
+
+      <header class="chat-head">
+        <button class="icon-btn mobile-only" id="chatBackBtn"><svg><use href="#i-arrow-left"/></svg></button>
+        <button class="chat-head-peer" id="chatHeadPeer">
+          <span class="avatar sm" id="chatPeerAvatar"><span>?</span></span>
+          <span class="chat-head-info">
+            <span class="chat-head-name" id="chatPeerName">—</span>
+            <span class="chat-head-status" id="chatPeerStatus">—</span>
+          </span>
+        </button>
+        <div class="chat-head-actions">
+          <button class="icon-btn" id="chatSearchBtn" title="Поиск по чату"><svg><use href="#i-search"/></svg></button>
+          <button class="icon-btn" id="audioCallBtn" title="Аудиозвонок"><svg><use href="#i-phone"/></svg></button>
+          <button class="icon-btn" id="videoCallBtn" title="Видеозвонок"><svg><use href="#i-video"/></svg></button>
+          <button class="icon-btn" id="chatMenuBtn" title="Меню чата"><svg><use href="#i-more"/></svg></button>
+        </div>
+      </header>
+
+      <!-- Поиск по сообщениям -->
+      <div class="chat-search-bar hidden" id="chatSearchBar">
+        <svg class="input-icon"><use href="#i-search"/></svg>
+        <input type="search" id="chatSearchInput" placeholder="Поиск в этом чате" autocomplete="off" />
+        <span class="chat-search-count" id="chatSearchCount"></span>
+        <button class="icon-btn tiny" id="chatSearchPrev" title="Предыдущее"><svg style="transform:rotate(90deg)"><use href="#i-chevron-right"/></svg></button>
+        <button class="icon-btn tiny" id="chatSearchNext" title="Следующее"><svg style="transform:rotate(-90deg)"><use href="#i-chevron-right"/></svg></button>
+        <button class="icon-btn tiny" id="chatSearchClose"><svg><use href="#i-x"/></svg></button>
+      </div>
+
+      <!-- Закреплённое сообщение -->
+      <div class="pinned-bar hidden" id="pinnedBar">
+        <svg><use href="#i-pin"/></svg>
+        <div class="pinned-text" id="pinnedText">—</div>
+        <button class="icon-btn tiny" id="pinnedUnpin" title="Открепить"><svg><use href="#i-x"/></svg></button>
+      </div>
+
+      <!-- Лента сообщений -->
+      <div class="messages-scroll" id="messagesScroll">
+        <div class="messages-inner" id="messagesInner">
+          <div class="load-more-wrap hidden" id="loadMoreWrap">
+            <button class="btn btn-ghost btn-sm" id="loadMoreBtn">Загрузить ещё</button>
+          </div>
+          <div id="messagesList"></div>
+        </div>
+        <div class="typing-floating hidden" id="typingIndicator">
+          <span class="typing-dots"><i></i><i></i><i></i></span>
+          <span id="typingText">печатает…</span>
+        </div>
+      </div>
+
+      <button class="scroll-down-btn hidden" id="scrollDownBtn">
+        <svg><use href="#i-chevron-down"/></svg>
+        <i class="tab-badge hidden" id="scrollDownBadge"></i>
+      </button>
+
+      <!-- Блокировка -->
+      <div class="blocked-bar hidden" id="blockedBar">
+        <svg><use href="#i-ban"/></svg>
+        <span id="blockedBarText">Пользователь заблокирован</span>
+        <button class="btn btn-ghost btn-sm" id="blockedBarAction">Разблокировать</button>
+      </div>
+
+      <!-- Композер -->
+      <div class="composer" id="composer">
+        <!-- Ответ / редактирование -->
+        <div class="composer-context hidden" id="composerContext">
+          <span class="ctx-icon"><svg id="composerContextIcon"><use href="#i-reply"/></svg></span>
+          <div class="ctx-body">
+            <div class="ctx-title" id="composerContextTitle">Ответ</div>
+            <div class="ctx-text" id="composerContextText">—</div>
+          </div>
+          <button class="icon-btn tiny" id="composerContextClose"><svg><use href="#i-x"/></svg></button>
+        </div>
+
+        <!-- Предпросмотр вложений -->
+        <div class="attach-preview hidden" id="attachPreview"></div>
+
+        <div class="composer-main">
+          <button class="icon-btn" id="emojiBtn" title="Эмодзи"><svg><use href="#i-smile"/></svg></button>
+          <button class="icon-btn" id="attachBtn" title="Прикрепить"><svg><use href="#i-paperclip"/></svg></button>
+          <div class="composer-input-wrap">
+            <textarea id="messageInput" placeholder="Сообщение" rows="1" maxlength="4000"></textarea>
+          </div>
+          <button class="icon-btn hidden" id="cancelEditBtn" title="Отменить"><svg><use href="#i-x"/></svg></button>
+          <button class="icon-btn send-btn" id="sendBtn" title="Отправить"><svg><use href="#i-send"/></svg></button>
+          <button class="icon-btn mic-btn" id="voiceBtn" title="Голосовое сообщение"><svg><use href="#i-mic"/></svg></button>
+        </div>
+
+        <!-- Запись голосового -->
+        <div class="voice-recorder hidden" id="voiceRecorder">
+          <button class="icon-btn danger" id="voiceCancelBtn" title="Отменить"><svg><use href="#i-trash"/></svg></button>
+          <span class="rec-dot"></span>
+          <span class="rec-time" id="voiceTime">0:00</span>
+          <div class="rec-wave" id="voiceWave"></div>
+          <button class="icon-btn send-btn" id="voiceSendBtn" title="Отправить"><svg><use href="#i-send"/></svg></button>
+        </div>
+
+        <!-- Скрытые файловые инпуты -->
+        <input type="file" id="fileInputImage" accept="image/*" multiple hidden />
+        <input type="file" id="fileInputVideo" accept="video/*" hidden />
+        <input type="file" id="fileInputAudio" accept="audio/*" hidden />
+        <input type="file" id="fileInputDoc" hidden />
+
+        <!-- Меню прикрепления -->
+        <div class="attach-menu hidden" id="attachMenu">
+          <button data-attach="image"><span class="am-icon grad-1"><svg><use href="#i-image"/></svg></span> Фото</button>
+          <button data-attach="video"><span class="am-icon grad-2"><svg><use href="#i-video"/></svg></span> Видео</button>
+          <button data-attach="audio"><span class="am-icon grad-3"><svg><use href="#i-speaker"/></svg></span> Аудио</button>
+          <button data-attach="doc"><span class="am-icon grad-4"><svg><use href="#i-file"/></svg></span> Документ</button>
+        </div>
+      </div>
+
+      <!-- Панель эмодзи / GIF / стикеров -->
+      <div class="picker-panel hidden" id="pickerPanel">
+        <div class="picker-tabs">
+          <button class="picker-tab active" data-picker="emoji"><svg><use href="#i-smile"/></svg> Эмодзи</button>
+          <button class="picker-tab" data-picker="gif"><svg><use href="#i-gif"/></svg> GIF</button>
+          <button class="picker-tab" data-picker="sticker"><svg><use href="#i-sticker"/></svg> Стикеры</button>
+          <button class="icon-btn tiny picker-close" id="pickerCloseBtn"><svg><use href="#i-x"/></svg></button>
+        </div>
+
+        <!-- Эмодзи -->
+        <div class="picker-pane active" data-pickerpane="emoji">
+          <div class="picker-search">
+            <svg class="input-icon"><use href="#i-search"/></svg>
+            <input type="search" id="emojiSearchInput" placeholder="Поиск эмодзи" autocomplete="off" />
+          </div>
+          <div class="emoji-cats" id="emojiCats"></div>
+          <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+
+        <!-- GIF -->
+        <div class="picker-pane" data-pickerpane="gif">
+          <div class="picker-search">
+            <svg class="input-icon"><use href="#i-search"/></svg>
+            <input type="search" id="gifSearchInput" placeholder="Поиск GIF" autocomplete="off" />
+            <button class="btn btn-ghost btn-sm" id="gifUploadBtn"><svg><use href="#i-plus"/></svg> Свой GIF</button>
+            <input type="file" id="gifUploadInput" accept="image/gif,image/webp" hidden />
+          </div>
+          <div class="gif-grid" id="gifGrid"></div>
+        </div>
+
+        <!-- Стикеры -->
+        <div class="picker-pane" data-pickerpane="sticker">
+          <div class="sticker-packs" id="stickerPacks"></div>
+          <div class="sticker-grid" id="stickerGrid"></div>
+          <div class="picker-foot">
+            <button class="btn btn-ghost btn-sm" id="stickerUploadBtn"><svg><use href="#i-plus"/></svg> Добавить свой стикер</button>
+            <input type="file" id="stickerUploadInput" accept="image/*" hidden />
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Правая панель: профиль собеседника ─────────────────────────── -->
+  <aside class="info-panel hidden" id="infoPanel">
+    <header class="info-head">
+      <button class="icon-btn" id="infoCloseBtn"><svg><use href="#i-x"/></svg></button>
+      <h3>Профиль</h3>
+    </header>
+    <div class="info-body">
+      <div class="info-hero">
+        <span class="avatar xl" id="infoAvatar"><span>?</span></span>
+        <div class="info-name" id="infoName">—</div>
+        <div class="info-username" id="infoUsername">@—</div>
+        <div class="info-status" id="infoStatus">—</div>
+      </div>
+      <div class="info-bio" id="infoBio"></div>
+      <div class="info-actions">
+        <button class="info-action" id="infoMessageBtn"><svg><use href="#i-chat"/></svg><span>Написать</span></button>
+        <button class="info-action" id="infoAudioBtn"><svg><use href="#i-phone"/></svg><span>Звонок</span></button>
+        <button class="info-action" id="infoVideoBtn"><svg><use href="#i-video"/></svg><span>Видео</span></button>
+      </div>
+      <div class="settings-group">
+        <button class="settings-row as-button" id="infoContactBtn">
+          <span class="settings-row-icon"><svg><use href="#i-user-plus"/></svg></span>
+          <span class="settings-row-label" id="infoContactLabel">Добавить в контакты</span>
+        </button>
+        <div class="settings-row">
+          <span class="settings-row-icon"><svg><use href="#i-bell"/></svg></span>
+          <span class="settings-row-label">Без звука</span>
+          <label class="switch"><input type="checkbox" id="infoMuteSwitch" /><span></span></label>
+        </div>
+        <button class="settings-row as-button danger" id="infoBlockBtn">
+          <span class="settings-row-icon"><svg><use href="#i-ban"/></svg></span>
+          <span class="settings-row-label" id="infoBlockLabel">Заблокировать</span>
+        </button>
+        <button class="settings-row as-button danger" id="infoReportBtn">
+          <span class="settings-row-icon"><svg><use href="#i-flag"/></svg></span>
+          <span class="settings-row-label">Пожаловаться</span>
+        </button>
+      </div>
+      <div class="list-section-title">Медиа чата</div>
+      <div class="media-grid" id="infoMediaGrid"></div>
+      <div class="empty-state small" id="infoMediaEmpty"><svg><use href="#i-image"/></svg><p>Медиа пока нет</p></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     ОВЕРЛЕЙ ЗВОНКА
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="callOverlay" class="call-overlay hidden">
+  <div class="call-bg"></div>
+
+  <video id="remoteVideo" class="call-remote-video" autoplay playsinline></video>
+  <audio id="remoteAudio" autoplay></audio>
+  <div class="call-remote-poster" id="callRemotePoster">
+    <span class="avatar xl" id="callPeerAvatar"><span>?</span></span>
+  </div>
+
+  <div class="call-local-wrap" id="callLocalWrap">
+    <video id="localVideo" class="call-local-video" autoplay playsinline muted></video>
+    <div class="call-local-off hidden" id="callLocalOff"><svg><use href="#i-video-off"/></svg></div>
+  </div>
+
+  <header class="call-head">
+    <div class="call-peer-name" id="callPeerName">—</div>
+    <div class="call-status" id="callStatus">Соединение…</div>
+    <div class="call-timer hidden" id="callTimer">00:00</div>
+    <div class="call-quality" id="callQuality"></div>
+  </header>
+
+  <div class="call-error hidden" id="callError"></div>
+
+  <!-- Входящий звонок -->
+  <div class="call-incoming hidden" id="callIncoming">
+    <div class="call-incoming-inner">
+      <span class="avatar xl pulse" id="incomingAvatar"><span>?</span></span>
+      <div class="call-incoming-name" id="incomingName">—</div>
+      <div class="call-incoming-type" id="incomingType">Входящий звонок</div>
+      <div class="call-incoming-actions">
+        <button class="call-btn reject" id="callRejectBtn" title="Отклонить"><svg><use href="#i-phone-off"/></svg></button>
+        <button class="call-btn accept" id="callAcceptBtn" title="Принять"><svg><use href="#i-phone"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Панель управления активным звонком -->
+  <div class="call-controls" id="callControls">
+    <button class="call-btn ghost" id="callMicBtn" title="Микрофон"><svg><use href="#i-mic"/></svg></button>
+    <button class="call-btn ghost" id="callCamBtn" title="Камера"><svg><use href="#i-video"/></svg></button>
+    <button class="call-btn ghost" id="callSwitchCamBtn" title="Сменить камеру"><svg><use href="#i-camera-switch"/></svg></button>
+    <button class="call-btn ghost" id="callSpeakerBtn" title="Динамик"><svg><use href="#i-speaker"/></svg></button>
+    <button class="call-btn end" id="callEndBtn" title="Завершить"><svg><use href="#i-phone-off"/></svg></button>
+  </div>
+</div>
+
+<!-- Рингтон (генерируется через WebAudio, элемент — запасной вариант) -->
+<audio id="ringtoneEl" loop></audio>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     МОДАЛЬНЫЕ ОКНА
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<!-- Универсальный хост модалок -->
+<div id="modalHost" class="modal-host hidden">
+  <div class="modal-backdrop" id="modalBackdrop"></div>
+
+  <!-- Редактирование профиля -->
+  <div class="modal hidden" id="modalEditProfile">
+    <header class="modal-head"><h3>Изменить профиль</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <div class="avatar-picker">
+        <div class="avatar-preview" id="editAvatarPreview"><span>?</span></div>
+        <input type="file" id="editAvatarInput" accept="image/*" hidden />
+        <button type="button" class="btn btn-ghost btn-sm" id="editAvatarBtn"><svg><use href="#i-camera"/></svg> Сменить фото</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="editAvatarClear">Удалить фото</button>
+      </div>
+      <form id="editProfileForm" novalidate>
+        <div class="field-row">
+          <div class="field"><label for="editFirstName">Имя *</label><div class="input-wrap"><input type="text" id="editFirstName" maxlength="32" required /></div></div>
+          <div class="field"><label for="editLastName">Фамилия</label><div class="input-wrap"><input type="text" id="editLastName" maxlength="32" /></div></div>
+        </div>
+        <div class="field">
+          <label for="editUsername">Username *</label>
+          <div class="input-wrap"><span class="input-prefix">@</span><input type="text" id="editUsername" maxlength="24" required /><span class="input-status" id="editUsernameStatus"></span></div>
+        </div>
+        <div class="field">
+          <label for="editBio">О себе</label>
+          <textarea id="editBio" rows="3" maxlength="140"></textarea>
+          <div class="field-hint"><span id="editBioCount">0</span>/140</div>
+        </div>
+        <div class="auth-error" id="editProfileError"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="editProfileSubmit"><span class="btn-label">Сохранить</span><span class="spinner"></span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Поиск людей -->
+  <div class="modal hidden" id="modalFindPeople">
+    <header class="modal-head"><h3>Найти людей</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <div class="sidebar-search inline">
+        <svg class="input-icon"><use href="#i-search"/></svg>
+        <input type="search" id="findPeopleInput" placeholder="@username, имя или email" autocomplete="off" />
+      </div>
+      <div class="list" id="findPeopleResults"></div>
+      <div class="empty-state small" id="findPeopleEmpty"><svg><use href="#i-search"/></svg><p>Введите минимум 2 символа</p></div>
+    </div>
+  </div>
+
+  <!-- Управление аккаунтами -->
+  <div class="modal hidden" id="modalAccounts">
+    <header class="modal-head"><h3>Аккаунты</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <div class="list" id="accountsManageList"></div>
+      <button class="btn btn-primary btn-block" id="addAccountBtn"><svg><use href="#i-plus"/></svg> Добавить аккаунт</button>
+      <p class="auth-note">Пароли не сохраняются на устройстве. Каждый аккаунт держит собственную защищённую сессию Firebase.</p>
+    </div>
+  </div>
+
+  <!-- Смена пароля -->
+  <div class="modal hidden" id="modalPassword">
+    <header class="modal-head"><h3>Изменить пароль</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <form id="passwordForm" novalidate>
+        <div class="field"><label for="currentPassword">Текущий пароль</label><div class="input-wrap"><svg class="input-icon"><use href="#i-lock"/></svg><input type="password" id="currentPassword" required /><button type="button" class="pw-toggle" data-pwtoggle="currentPassword"><svg><use href="#i-eye"/></svg></button></div></div>
+        <div class="field"><label for="newPassword">Новый пароль</label><div class="input-wrap"><svg class="input-icon"><use href="#i-lock"/></svg><input type="password" id="newPassword" required /><button type="button" class="pw-toggle" data-pwtoggle="newPassword"><svg><use href="#i-eye"/></svg></button></div></div>
+        <div class="field"><label for="newPassword2">Повторите новый</label><div class="input-wrap"><svg class="input-icon"><use href="#i-lock"/></svg><input type="password" id="newPassword2" required /><button type="button" class="pw-toggle" data-pwtoggle="newPassword2"><svg><use href="#i-eye"/></svg></button></div></div>
+        <div class="auth-error" id="passwordError"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="passwordSubmit"><span class="btn-label">Сохранить</span><span class="spinner"></span></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Заблокированные -->
+  <div class="modal hidden" id="modalBlocked">
+    <header class="modal-head"><h3>Заблокированные</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <div class="list" id="blockedList"></div>
+      <div class="empty-state small" id="blockedEmpty"><svg><use href="#i-ban"/></svg><p>Список пуст</p></div>
+    </div>
+  </div>
+
+  <!-- Пересылка -->
+  <div class="modal hidden" id="modalForward">
+    <header class="modal-head"><h3>Переслать</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <div class="sidebar-search inline">
+        <svg class="input-icon"><use href="#i-search"/></svg>
+        <input type="search" id="forwardSearchInput" placeholder="Кому переслать" autocomplete="off" />
+      </div>
+      <div class="list" id="forwardList"></div>
+    </div>
+  </div>
+
+  <!-- Жалоба -->
+  <div class="modal hidden" id="modalReport">
+    <header class="modal-head"><h3>Пожаловаться</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <p class="panel-text">Опишите проблему — администратор рассмотрит обращение.</p>
+      <div class="field">
+        <label for="reportReason">Причина</label>
+        <select id="reportReason" class="select-full">
+          <option value="spam">Спам</option>
+          <option value="abuse">Оскорбления</option>
+          <option value="fraud">Мошенничество</option>
+          <option value="content">Недопустимый контент</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+      <div class="field"><label for="reportComment">Комментарий</label><textarea id="reportComment" rows="4" maxlength="500" placeholder="Подробности"></textarea></div>
+      <div class="auth-error" id="reportError"></div>
+      <button class="btn btn-primary btn-block" id="reportSubmit"><span class="btn-label">Отправить жалобу</span><span class="spinner"></span></button>
+    </div>
+  </div>
+
+  <!-- Карточка пользователя (админ) -->
+  <div class="modal hidden" id="modalAdminUser">
+    <header class="modal-head"><h3>Пользователь</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body" id="adminUserBody"></div>
+  </div>
+
+  <!-- Подтверждение -->
+  <div class="modal small hidden" id="modalConfirm">
+    <header class="modal-head"><h3 id="confirmTitle">Подтвердите</h3><button class="icon-btn" data-close-modal><svg><use href="#i-x"/></svg></button></header>
+    <div class="modal-body">
+      <p class="panel-text" id="confirmText">—</p>
+      <div class="field hidden" id="confirmInputField">
+        <div class="input-wrap"><input type="password" id="confirmInput" placeholder="Пароль" /></div>
+      </div>
+      <div class="auth-error" id="confirmError"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="confirmCancel">Отмена</button>
+        <button class="btn btn-danger" id="confirmOk"><span class="btn-label">Подтвердить</span><span class="spinner"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Просмотрщик изображений -->
+<div id="lightbox" class="lightbox hidden">
+  <button class="icon-btn lightbox-close" id="lightboxClose"><svg><use href="#i-x"/></svg></button>
+  <a class="icon-btn lightbox-download" id="lightboxDownload" download target="_blank" rel="noopener"><svg><use href="#i-download"/></svg></a>
+  <img id="lightboxImg" alt="" />
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<!-- Контекстное меню сообщения -->
+<div id="msgMenu" class="ctx-menu hidden"></div>
+<!-- Контекстное меню чата -->
+<div id="chatMenu" class="ctx-menu hidden"></div>
+<!-- Панель быстрых реакций -->
+<div id="reactionBar" class="reaction-bar hidden"></div>
+
+<!-- Тосты -->
+<div id="toastHost" class="toast-host"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

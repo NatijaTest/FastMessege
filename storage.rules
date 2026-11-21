@@ -1,0 +1,62 @@
+rules_version = '2';
+
+// FastMessage — правила Firebase Storage.
+// Без этого файла, опубликованного в Firebase Console → Storage → Rules,
+// ВСЕ загрузки (фото, видео, голосовые, файлы, стикеры, аватары) отклоняются
+// с кодом storage/unauthorized, и приложение автоматически уходит в резервный
+// режим (сохранение прямо в базу data-URI), который не принимает файлы
+// крупнее ~320 КБ — отсюда ошибка «Файл не отправлен».
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Любой подписанный пользователь может читать файлы (нужно для показа
+    // фото/видео в чате собеседнику). Писать может только владелец своей
+    // папки chat/{uid}/..., с ограничением на размер и тип файла.
+    match /chat/{uid}/{folder}/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.size < 80 * 1024 * 1024
+        && (
+          request.resource.contentType.matches('image/.*') ||
+          request.resource.contentType.matches('video/.*') ||
+          request.resource.contentType.matches('audio/.*') ||
+          request.resource.contentType.matches('application/.*')
+        );
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Аватары профиля.
+    match /avatars/{uid}/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Пользовательские стикеры и GIF — тоже свои папки по uid.
+    match /stickers/{uid}/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+    match /gifs/{uid}/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.size < 12 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Всё остальное — запрещено по умолчанию.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
